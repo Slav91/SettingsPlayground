@@ -10,9 +10,6 @@
 4. [Using the App](#using-the-app)
 5. [Settings Explained](#settings-explained)
 6. [Architecture](#architecture)
-7. [Development Guidelines](#development-guidelines)
-8. [Extending the App](#extending-the-app)
-9. [Troubleshooting](#troubleshooting)
 
 ---
 
