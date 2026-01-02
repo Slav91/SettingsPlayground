@@ -1,0 +1,101 @@
+.stats-card {
+    background-color: var(--card-background);
+    border-radius: var(--corner-l);
+    padding: var(--card-padding);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed) var(--transition-easing);
+}
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-l);
+}
+
+.stats-header h3 {
+    font-size: var(--font-l);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.refresh-btn {
+    background-color: var(--accent-light);
+    color: var(--accent);
+    border: none;
+    border-radius: var(--corner-m);
+    padding: var(--space-s) var(--space-m);
+    font-size: var(--font-l);
+    cursor: pointer;
+    transition: all var(--transition-speed) var(--transition-easing);
+}
+
+.refresh-btn:hover {
+    background-color: var(--accent);
+    color: white;
+    transform: rotate(180deg);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-m);
+}
+
+.stat-item {
+    display: flex;
+    gap: var(--space-m);
+    padding: calc(var(--space-m) * var(--density-multiplier));
+    background-color: var(--app-background);
+    border-radius: var(--corner-m);
+    transition: all var(--transition-speed) var(--transition-easing);
+}
+
+.stat-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: calc(48px * var(--font-scale));
+    height: calc(48px * var(--font-scale));
+    border-radius: var(--corner-m);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(24px * var(--font-scale));
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--space-xs) / 2);
+}
+
+.stat-value {
+    font-size: var(--font-l);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: var(--font-s);
+    color: var(--text-secondary);
+}
+
+.stat-change {
+    font-size: var(--font-xs);
+    font-weight: 600;
+}
+
+.stat-change.positive {
+    color: #27ae60;
+}
+
+.stat-change.negative {
+    color: #e74c3c;
+}
+

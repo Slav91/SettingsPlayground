@@ -1,0 +1,63 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@using SettingsPlayground.Services
+@using SettingsPlayground.Models
+@inject SettingsState SettingsState
+@inject ThemeService ThemeService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+@code {
+    private bool _initialized = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SettingsState.InitializeAsync();
+        SettingsState.SettingsChanged += OnSettingsChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_initialized)
+        {
+            _initialized = true;
+            
+            try
+            {
+                await ThemeService.ApplyThemeAsync(SettingsState.Current);
+                
+                var currentPath = new Uri(NavigationManager.Uri).AbsolutePath;
+                if (currentPath == "/" && SettingsState.Current.StartPage == StartPageOption.Settings)
+                {
+                    NavigationManager.NavigateTo("/settings");
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+
+    private async void OnSettingsChanged(object? sender, EventArgs e)
+    {
+        try
+        {
+            await InvokeAsync(async () =>
+            {
+                await ThemeService.ApplyThemeAsync(SettingsState.Current);
+                StateHasChanged();
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error applying theme: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        SettingsState.SettingsChanged -= OnSettingsChanged;
+    }
+}
+
+

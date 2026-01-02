@@ -1,0 +1,60 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@page "/"
+@using SettingsPlayground.Services
+@using SettingsPlayground.Models
+@using SettingsPlayground.Components.Views.PreviewCards
+@inject SettingsState SettingsState
+@implements IDisposable
+
+<div class="preview-page">
+    <div class="page-header">
+        <h1>Preview</h1>
+        <p class="page-subtitle">See how your settings affect the UI</p>
+    </div>
+
+    <div class="preview-content">
+        <div class="preview-section">
+            <ProfileCard />
+        </div>
+
+        <div class="preview-section">
+            <StatsCard />
+        </div>
+
+        <div class="preview-section">
+            <ButtonShowcase />
+        </div>
+
+        <div class="preview-section">
+            <ListPreview />
+        </div>
+
+        <div class="preview-section">
+            <FormPreview />
+        </div>
+
+        <div class="preview-section">
+            <ArticlePreview />
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        SettingsState.SettingsChanged += OnSettingsChanged;
+    }
+
+    private void OnSettingsChanged(object? sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        SettingsState.SettingsChanged -= OnSettingsChanged;
+    }
+}
+
+

@@ -1,0 +1,39 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@namespace SettingsPlayground.Components.Views.SettingsRows
+
+<div class="setting-row">
+    <div class="setting-info">
+        <div class="setting-label">@Label</div>
+        @if (!string.IsNullOrEmpty(Description))
+        {
+            <div class="setting-description">@Description</div>
+        }
+    </div>
+    <label class="toggle-switch">
+        <input type="checkbox" checked="@Value" @onchange="OnToggleChanged" />
+        <span class="toggle-slider"></span>
+    </label>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Description { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    private async Task OnToggleChanged(ChangeEventArgs e)
+    {
+        Value = (bool)(e.Value ?? false);
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
+
+

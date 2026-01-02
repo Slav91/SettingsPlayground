@@ -1,0 +1,73 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@inject SettingsState SettingsState
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; font-size: 10px; border-radius: 4px; z-index: 9999; max-width: 200px;">
+    <div><strong>Theme Debug</strong></div>
+    <div>Theme: @SettingsState.Current.Theme</div>
+    <div>Accent: @SettingsState.Current.AccentColour</div>
+    <div>Font: @SettingsState.Current.FontScale.ToString("0.00")</div>
+    <div>Density: @SettingsState.Current.Density</div>
+    <div>Corners: @SettingsState.Current.CornerRadius</div>
+    <div>JS Applied: @jsApplied</div>
+</div>
+
+@code {
+    private bool jsApplied = false;
+
+    protected override void OnInitialized()
+    {
+        SettingsState.SettingsChanged += OnSettingsChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(500);
+            await ApplyThemeDirectly();
+        }
+    }
+
+    private async void OnSettingsChanged(object? sender, EventArgs e)
+    {
+        await InvokeAsync(async () =>
+        {
+            await ApplyThemeDirectly();
+            StateHasChanged();
+        });
+    }
+
+    private async Task ApplyThemeDirectly()
+    {
+        try
+        {
+            var settings = SettingsState.Current;
+            var theme = settings.Theme == Models.ThemeMode.System ? "light" : settings.Theme.ToString().ToLower();
+            
+            await JS.InvokeVoidAsync("settingsPlayground.applyTheme",
+                theme,
+                settings.AccentColour.ToString().ToLower(),
+                settings.Density.ToString().ToLower(),
+                settings.CornerRadius.ToString().ToLower(),
+                settings.HighContrast.ToString().ToLower(),
+                settings.ReduceMotion.ToString().ToLower(),
+                settings.FontScale.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)
+            );
+            jsApplied = true;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error in ThemeDebugger: {ex.Message}");
+            jsApplied = false;
+        }
+    }
+
+    public void Dispose()
+    {
+        SettingsState.SettingsChanged -= OnSettingsChanged;
+    }
+}
+

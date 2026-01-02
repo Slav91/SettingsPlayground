@@ -1,0 +1,63 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@namespace SettingsPlayground.Components.Views.SettingsRows
+
+<div class="setting-row slider-row">
+    <div class="setting-header">
+        <div class="setting-info">
+            <div class="setting-label">@Label</div>
+            @if (!string.IsNullOrEmpty(Description))
+            {
+                <div class="setting-description">@Description</div>
+            }
+        </div>
+        <div class="setting-value">@ValueLabel</div>
+    </div>
+    <input 
+        type="range" 
+        class="slider" 
+        min="@Min" 
+        max="@Max" 
+        step="@Step" 
+        value="@Value" 
+        @oninput="OnSliderChanged" />
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Description { get; set; } = string.Empty;
+
+    [Parameter]
+    public double Value { get; set; }
+
+    [Parameter]
+    public EventCallback<double> ValueChanged { get; set; }
+
+    [Parameter]
+    public double Min { get; set; } = 0;
+
+    [Parameter]
+    public double Max { get; set; } = 100;
+
+    [Parameter]
+    public double Step { get; set; } = 1;
+
+    [Parameter]
+    public Func<double, string>? ValueFormatter { get; set; }
+
+    private string ValueLabel => ValueFormatter?.Invoke(Value) ?? Value.ToString("0.00");
+
+    private async Task OnSliderChanged(ChangeEventArgs e)
+    {
+        if (double.TryParse(e.Value?.ToString(), out var newValue))
+        {
+            Value = newValue;
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+}
+
+

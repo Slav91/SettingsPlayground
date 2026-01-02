@@ -1,0 +1,42 @@
+.preview-page {
+    min-height: 100vh;
+    background-color: var(--app-background);
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+}
+
+.page-header {
+    padding-top: calc(56px + env(safe-area-inset-top, 20px));
+    padding-bottom: var(--space-l);
+    padding-left: var(--space-m);
+    padding-right: var(--space-m);
+    background-color: var(--card-background);
+    border-bottom: 1px solid var(--border-colour);
+}
+
+.page-header h1 {
+    font-size: var(--font-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-xs) 0;
+}
+
+.page-subtitle {
+    font-size: var(--font-s);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.preview-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-m);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+}
+
+.preview-section {
+    /* Container for each preview card */
+}
+
+

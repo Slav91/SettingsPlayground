@@ -1,0 +1,353 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@page "/settings"
+@using SettingsPlayground.Services
+@using SettingsPlayground.Models
+@using SettingsPlayground.Components.Views.SettingsRows
+@inject SettingsState SettingsState
+@inject ImportExportService ImportExportService
+@implements IDisposable
+
+<div class="settings-page">
+    <div class="page-header">
+        <h1>Settings</h1>
+    </div>
+
+    @if (showUndoBanner && lastChange != null)
+    {
+        <div class="undo-banner">
+            <span>Changed @lastChange.SettingName: @lastChange.OldValue → @lastChange.NewValue</span>
+            <button class="undo-button" @onclick="OnUndo">Undo</button>
+        </div>
+    }
+
+    <div class="settings-content">
+        <div class="settings-section">
+            <div class="section-header">Appearance</div>
+
+            <SegmentRow 
+                Label="Theme" 
+                Description="Choose your preferred colour scheme"
+                TValue="ThemeMode"
+                Value="settings.Theme" 
+                ValueChanged="async (value) => await OnThemeChanged(value)"
+                Options="themeOptions" />
+
+            <SegmentRow 
+                Label="Accent Colour" 
+                Description="Select your accent colour"
+                TValue="AccentColour"
+                Value="settings.AccentColour" 
+                ValueChanged="async (value) => await OnAccentColourChanged(value)"
+                Options="accentOptions" />
+
+            <SliderRow 
+                Label="Font Scale" 
+                Description="Adjust text size for better readability"
+                Value="settings.FontScale" 
+                ValueChanged="async (value) => await OnFontScaleChanged(value)"
+                Min="0.9" 
+                Max="1.25" 
+                Step="0.05"
+                ValueFormatter="FormatFontScale" />
+
+            <SegmentRow 
+                Label="Density" 
+                Description="Control spacing between elements"
+                TValue="DensityMode"
+                Value="settings.Density" 
+                ValueChanged="async (value) => await OnDensityChanged(value)"
+                Options="densityOptions" />
+
+            <SegmentRow 
+                Label="Corner Radius" 
+                Description="Choose edge style for UI elements"
+                TValue="CornerStyle"
+                Value="settings.CornerRadius" 
+                ValueChanged="async (value) => await OnCornerRadiusChanged(value)"
+                Options="cornerOptions" />
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">Accessibility</div>
+
+            <ToggleRow 
+                Label="Reduce Motion" 
+                Description="Minimise animations and transitions"
+                Value="settings.ReduceMotion" 
+                ValueChanged="async (value) => await OnReduceMotionChanged(value)" />
+
+            <ToggleRow 
+                Label="High Contrast" 
+                Description="Increase contrast for better visibility"
+                Value="settings.HighContrast" 
+                ValueChanged="async (value) => await OnHighContrastChanged(value)" />
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">Preferences</div>
+
+            <ToggleRow 
+                Label="Confirm Deletes" 
+                Description="Ask for confirmation before deleting items"
+                Value="settings.ConfirmDeletes" 
+                ValueChanged="async (value) => await OnConfirmDeletesChanged(value)" />
+
+            <SegmentRow 
+                Label="Start Page" 
+                Description="Default page when app opens"
+                TValue="StartPageOption"
+                Value="settings.StartPage" 
+                ValueChanged="async (value) => await OnStartPageChanged(value)"
+                Options="startPageOptions" />
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">Data</div>
+
+            <ActionRow 
+                Label="Export Settings" 
+                Description="Copy settings as JSON to clipboard"
+                Icon="↗"
+                OnClick="OnExport" />
+
+            <ActionRow 
+                Label="Import Settings" 
+                Description="Paste JSON to restore settings"
+                Icon="↓"
+                OnClick="OnImport" />
+
+            <ActionRow 
+                Label="Reset to Defaults" 
+                Description="Restore all settings to their default values"
+                Icon="⟲"
+                OnClick="OnReset" />
+        </div>
+    </div>
+
+    @if (showImportDialog)
+    {
+        <div class="dialog-overlay" @onclick="() => showImportDialog = false">
+            <div class="dialog-content" @onclick:stopPropagation="true">
+                <h2>Import Settings</h2>
+                <p>Paste your settings JSON below:</p>
+                <textarea class="import-textarea" @bind="importJson" placeholder="Paste JSON here..."></textarea>
+                @if (!string.IsNullOrEmpty(importError))
+                {
+                    <div class="error-message">@importError</div>
+                }
+                <div class="dialog-actions">
+                    <button class="dialog-button secondary" @onclick="() => showImportDialog = false">Cancel</button>
+                    <button class="dialog-button primary" @onclick="OnImportConfirm">Import</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (showMessage)
+    {
+        <div class="toast-message">@toastMessage</div>
+    }
+</div>
+
+@code {
+    private UserSettings settings = new();
+    private bool showUndoBanner = false;
+    private SettingChange? lastChange = null;
+    private System.Timers.Timer? bannerTimer;
+    private bool showImportDialog = false;
+    private string importJson = string.Empty;
+    private string importError = string.Empty;
+    private bool showMessage = false;
+    private string toastMessage = string.Empty;
+
+    private List<SegmentOption<ThemeMode>> themeOptions = new()
+    {
+        new() { Label = "System", Value = ThemeMode.System },
+        new() { Label = "Light", Value = ThemeMode.Light },
+        new() { Label = "Dark", Value = ThemeMode.Dark }
+    };
+
+    private List<SegmentOption<AccentColour>> accentOptions = new()
+    {
+        new() { Label = "Blue", Value = AccentColour.Blue },
+        new() { Label = "Purple", Value = AccentColour.Purple },
+        new() { Label = "Green", Value = AccentColour.Green },
+        new() { Label = "Orange", Value = AccentColour.Orange },
+        new() { Label = "Red", Value = AccentColour.Red },
+        new() { Label = "Pink", Value = AccentColour.Pink }
+    };
+
+    private List<SegmentOption<DensityMode>> densityOptions = new()
+    {
+        new() { Label = "Compact", Value = DensityMode.Compact },
+        new() { Label = "Comfortable", Value = DensityMode.Comfortable }
+    };
+
+    private List<SegmentOption<CornerStyle>> cornerOptions = new()
+    {
+        new() { Label = "Sharp", Value = CornerStyle.Sharp },
+        new() { Label = "Rounded", Value = CornerStyle.Rounded }
+    };
+
+    private List<SegmentOption<StartPageOption>> startPageOptions = new()
+    {
+        new() { Label = "Preview", Value = StartPageOption.Preview },
+        new() { Label = "Settings", Value = StartPageOption.Settings }
+    };
+
+    protected override void OnInitialized()
+    {
+        settings = SettingsState.Current.Clone();
+        SettingsState.SettingsChanged += OnSettingsChanged;
+    }
+
+    private void OnSettingsChanged(object? sender, EventArgs e)
+    {
+        settings = SettingsState.Current.Clone();
+        lastChange = SettingsState.GetLastChange();
+        
+        if (lastChange != null)
+        {
+            ShowUndoBanner();
+        }
+
+        StateHasChanged();
+    }
+
+    private void ShowUndoBanner()
+    {
+        showUndoBanner = true;
+        bannerTimer?.Stop();
+        bannerTimer = new System.Timers.Timer(4000);
+        bannerTimer.Elapsed += (s, e) =>
+        {
+            showUndoBanner = false;
+            InvokeAsync(StateHasChanged);
+            bannerTimer?.Stop();
+        };
+        bannerTimer.Start();
+    }
+
+    private async Task OnUndo()
+    {
+        await SettingsState.UndoAsync();
+        showUndoBanner = false;
+        bannerTimer?.Stop();
+    }
+
+    private async Task OnThemeChanged(ThemeMode value)
+    {
+        await SettingsState.UpdateAsync(s => s.Theme = value, "Theme", settings.Theme.ToString(), value.ToString());
+    }
+
+    private async Task OnAccentColourChanged(AccentColour value)
+    {
+        await SettingsState.UpdateAsync(s => s.AccentColour = value, "Accent Colour", settings.AccentColour.ToString(), value.ToString());
+    }
+
+    private async Task OnFontScaleChanged(double value)
+    {
+        await SettingsState.UpdateAsync(s => s.FontScale = value, "Font Scale", FormatFontScale(settings.FontScale), FormatFontScale(value));
+    }
+
+    private async Task OnDensityChanged(DensityMode value)
+    {
+        await SettingsState.UpdateAsync(s => s.Density = value, "Density", settings.Density.ToString(), value.ToString());
+    }
+
+    private async Task OnCornerRadiusChanged(CornerStyle value)
+    {
+        await SettingsState.UpdateAsync(s => s.CornerRadius = value, "Corner Radius", settings.CornerRadius.ToString(), value.ToString());
+    }
+
+    private async Task OnReduceMotionChanged(bool value)
+    {
+        await SettingsState.UpdateAsync(s => s.ReduceMotion = value, "Reduce Motion", settings.ReduceMotion ? "On" : "Off", value ? "On" : "Off");
+    }
+
+    private async Task OnHighContrastChanged(bool value)
+    {
+        await SettingsState.UpdateAsync(s => s.HighContrast = value, "High Contrast", settings.HighContrast ? "On" : "Off", value ? "On" : "Off");
+    }
+
+    private async Task OnConfirmDeletesChanged(bool value)
+    {
+        await SettingsState.UpdateAsync(s => s.ConfirmDeletes = value, "Confirm Deletes", settings.ConfirmDeletes ? "On" : "Off", value ? "On" : "Off");
+    }
+
+    private async Task OnStartPageChanged(StartPageOption value)
+    {
+        await SettingsState.UpdateAsync(s => s.StartPage = value, "Start Page", settings.StartPage.ToString(), value.ToString());
+    }
+
+    private string FormatFontScale(double scale)
+    {
+        if (scale == 0.9) return "S";
+        if (scale == 1.0) return "M";
+        if (scale == 1.1) return "L";
+        if (scale >= 1.25) return "XL";
+        return scale.ToString("0.00");
+    }
+
+    private async Task OnExport()
+    {
+        var json = ImportExportService.ExportToJson(SettingsState.Current);
+        await Clipboard.SetTextAsync(json);
+        ShowToast("Settings exported to clipboard!");
+    }
+
+    private void OnImport()
+    {
+        importJson = string.Empty;
+        importError = string.Empty;
+        showImportDialog = true;
+    }
+
+    private async Task OnImportConfirm()
+    {
+        var result = ImportExportService.ImportFromJson(importJson);
+        
+        if (result.IsValid && result.Settings != null)
+        {
+            await SettingsState.ImportSettingsAsync(result.Settings);
+            showImportDialog = false;
+            ShowToast("Settings imported successfully!");
+        }
+        else
+        {
+            importError = result.ErrorMessage;
+        }
+    }
+
+    private async Task OnReset()
+    {
+        await SettingsState.ResetAsync();
+        ShowToast("Settings reset to defaults");
+    }
+
+    private void ShowToast(string message)
+    {
+        toastMessage = message;
+        showMessage = true;
+        StateHasChanged();
+        
+        var timer = new System.Timers.Timer(3000);
+        timer.Elapsed += (s, e) =>
+        {
+            showMessage = false;
+            InvokeAsync(StateHasChanged);
+            timer?.Stop();
+        };
+        timer.Start();
+    }
+
+    public void Dispose()
+    {
+        SettingsState.SettingsChanged -= OnSettingsChanged;
+        bannerTimer?.Stop();
+        bannerTimer?.Dispose();
+    }
+}
+
+

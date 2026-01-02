@@ -1,0 +1,36 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@namespace SettingsPlayground.Components.Views.SettingsRows
+
+<div class="setting-row action-row" @onclick="OnClick">
+    <div class="setting-info">
+        <div class="setting-label">@Label</div>
+        @if (!string.IsNullOrEmpty(Description))
+        {
+            <div class="setting-description">@Description</div>
+        }
+    </div>
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <div class="action-icon">@Icon</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Description { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Icon { get; set; } = "›";
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter]
+    public bool IsDestructive { get; set; }
+}
+
+

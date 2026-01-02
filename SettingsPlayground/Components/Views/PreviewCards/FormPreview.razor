@@ -1,0 +1,44 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@namespace SettingsPlayground.Components.Views.PreviewCards
+
+<div class="form-preview">
+    <div class="form-header">
+        <h3>Form Elements</h3>
+        <p class="form-description">Interactive form components</p>
+    </div>
+    
+    <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" placeholder="your@email.com" value="slav@example.com" readonly />
+    </div>
+    
+    <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" rows="3" placeholder="Type your message here..." readonly>This is a preview of how text areas look with your current settings.</textarea>
+    </div>
+    
+    <div class="form-group">
+        <label class="form-label">Project Type</label>
+        <select class="form-select">
+            <option>Web Application</option>
+            <option>Mobile App</option>
+            <option>Desktop Software</option>
+        </select>
+    </div>
+    
+    <div class="checkbox-group">
+        <label class="checkbox-label">
+            <input type="checkbox" checked readonly />
+            <span>Send me updates</span>
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" readonly />
+            <span>Enable notifications</span>
+        </label>
+    </div>
+</div>
+
+@code {
+}
+

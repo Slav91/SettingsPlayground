@@ -1,0 +1,211 @@
+.settings-page {
+    min-height: 100vh;
+    background-color: var(--app-background);
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+}
+
+.page-header {
+    padding-top: calc(56px + env(safe-area-inset-top, 20px));
+    padding-bottom: var(--space-l);
+    padding-left: var(--space-m);
+    padding-right: var(--space-m);
+    background-color: var(--card-background);
+    border-bottom: 1px solid var(--border-colour);
+}
+
+.page-header h1 {
+    font-size: var(--font-xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.undo-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-m);
+    background-color: var(--accent-light);
+    border-bottom: 1px solid var(--border-colour);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.undo-banner span {
+    font-size: var(--font-s);
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.undo-button {
+    padding: var(--space-s) var(--space-m);
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--corner-s);
+    font-size: var(--font-s);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-easing);
+}
+
+.undo-button:hover {
+    background-color: var(--accent-hover);
+}
+
+.settings-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.settings-section {
+    margin-top: var(--space-l);
+    background-color: var(--card-background);
+    border-radius: var(--corner-m);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+    padding: var(--space-m);
+    font-size: var(--font-s);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: var(--app-background);
+    border-bottom: 1px solid var(--border-colour);
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--space-m);
+}
+
+.dialog-content {
+    background-color: var(--card-background);
+    border-radius: var(--corner-l);
+    padding: var(--space-l);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.dialog-content h2 {
+    font-size: var(--font-l);
+    margin-bottom: var(--space-s);
+    color: var(--text-primary);
+}
+
+.dialog-content p {
+    font-size: var(--font-s);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-m);
+}
+
+.import-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: var(--space-m);
+    border: 1px solid var(--border-colour);
+    border-radius: var(--corner-s);
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-s);
+    background-color: var(--app-background);
+    color: var(--text-primary);
+    resize: vertical;
+}
+
+.error-message {
+    margin-top: var(--space-s);
+    padding: var(--space-s);
+    background-color: var(--accent-light);
+    border-left: 3px solid #e74c3c;
+    border-radius: var(--corner-s);
+    font-size: var(--font-s);
+    color: #e74c3c;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: var(--space-s);
+    justify-content: flex-end;
+    margin-top: var(--space-l);
+}
+
+.dialog-button {
+    padding: var(--space-s) var(--space-l);
+    border: none;
+    border-radius: var(--corner-s);
+    font-size: var(--font-m);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-speed) var(--transition-easing);
+}
+
+.dialog-button.primary {
+    background-color: var(--accent);
+    color: white;
+}
+
+.dialog-button.primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.dialog-button.secondary {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-colour);
+}
+
+.dialog-button.secondary:hover {
+    background-color: var(--accent-light);
+}
+
+.toast-message {
+    position: fixed;
+    bottom: calc(110px + env(safe-area-inset-bottom, 12px));
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--text-primary);
+    color: var(--card-background);
+    padding: var(--space-m) var(--space-l);
+    border-radius: var(--corner-m);
+    font-size: var(--font-s);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    animation: fadeInUp 0.3s ease-out;
+    max-width: 90%;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+

@@ -1,0 +1,138 @@
+/* Copyright Slav Povstianoj 2026 */
+
+/* Theme Tokens - System (Light) */
+:root {
+    /* Colour Tokens */
+    --app-background: #f5f5f5;
+    --card-background: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --border-colour: #e0e0e0;
+    --accent: #1e90ff;
+    --accent-hover: #1873cc;
+    --accent-light: #e3f2ff;
+    
+    /* Spacing Tokens */
+    --space-xs: 4px;
+    --space-s: 8px;
+    --space-m: 16px;
+    --space-l: 24px;
+    --space-xl: 32px;
+    
+    /* Corner Radius Tokens */
+    --corner-s: 4px;
+    --corner-m: 8px;
+    --corner-l: 12px;
+    
+    /* Font Scale Tokens */
+    --font-scale: 1.0;
+    --font-xs: calc(12px * var(--font-scale));
+    --font-s: calc(14px * var(--font-scale));
+    --font-m: calc(16px * var(--font-scale));
+    --font-l: calc(20px * var(--font-scale));
+    --font-xl: calc(24px * var(--font-scale));
+    
+    /* Density Tokens */
+    --density-multiplier: 1.0;
+    --row-height: calc(56px * var(--density-multiplier));
+    --card-padding: calc(var(--space-m) * var(--density-multiplier));
+    
+    /* Motion */
+    --transition-speed: 0.2s;
+    --transition-easing: ease-in-out;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --app-background: #1a1a1a;
+    --card-background: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --border-colour: #404040;
+    --accent-light: #1a3d5c;
+}
+
+/* High Contrast */
+[data-high-contrast="true"] {
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --border-colour: #000000;
+}
+
+[data-theme="dark"][data-high-contrast="true"] {
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-colour: #ffffff;
+}
+
+/* Accent Colours */
+[data-accent="blue"] {
+    --accent: #1e90ff;
+    --accent-hover: #1873cc;
+    --accent-light: #e3f2ff;
+}
+
+[data-accent="purple"] {
+    --accent: #9b59b6;
+    --accent-hover: #7d3c98;
+    --accent-light: #f4ecf7;
+}
+
+[data-accent="green"] {
+    --accent: #27ae60;
+    --accent-hover: #1e8449;
+    --accent-light: #eafaf1;
+}
+
+[data-accent="orange"] {
+    --accent: #e67e22;
+    --accent-hover: #ca6f1e;
+    --accent-light: #fef5e7;
+}
+
+[data-accent="red"] {
+    --accent: #e74c3c;
+    --accent-hover: #c0392b;
+    --accent-light: #fadbd8;
+}
+
+[data-accent="pink"] {
+    --accent: #ec407a;
+    --accent-hover: #d81b60;
+    --accent-light: #fce4ec;
+}
+
+/* Density Modes */
+[data-density="compact"] {
+    --density-multiplier: 0.75;
+}
+
+[data-density="comfortable"] {
+    --density-multiplier: 1.0;
+}
+
+/* Corner Styles */
+[data-corners="sharp"] {
+    --corner-s: 0px;
+    --corner-m: 0px;
+    --corner-l: 0px;
+}
+
+[data-corners="rounded"] {
+    --corner-s: 4px;
+    --corner-m: 8px;
+    --corner-l: 12px;
+}
+
+/* Reduced Motion */
+[data-reduce-motion="true"] {
+    --transition-speed: 0s;
+}
+
+[data-reduce-motion="true"] * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+
+

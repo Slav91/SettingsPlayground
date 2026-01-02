@@ -1,0 +1,49 @@
+@* Copyright Slav Povstianoj 2026 *@
+
+@namespace SettingsPlayground.Components.Views.SettingsRows
+@using SettingsPlayground.Models
+@typeparam TValue
+
+<div class="setting-row segment-row">
+    <div class="setting-info">
+        <div class="setting-label">@Label</div>
+        @if (!string.IsNullOrEmpty(Description))
+        {
+            <div class="setting-description">@Description</div>
+        }
+    </div>
+    <div class="segment-control">
+        @foreach (var option in Options)
+        {
+            <button 
+                class="segment-button @(EqualityComparer<TValue>.Default.Equals(option.Value, Value) ? "active" : "")"
+                @onclick="() => OnOptionSelected(option.Value)">
+                @option.Label
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Description { get; set; } = string.Empty;
+
+    [Parameter]
+    public TValue Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<TValue> ValueChanged { get; set; }
+
+    [Parameter]
+    public List<SegmentOption<TValue>> Options { get; set; } = new();
+
+    private async Task OnOptionSelected(TValue value)
+    {
+        Value = value;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
+
