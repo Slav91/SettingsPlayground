@@ -2,7 +2,18 @@
 
 **Copyright Slav Povstianoj 2026**
 
+<<<<<<< HEAD
 A MAUI Blazor Hybrid app demonstrating real-time UI customization with live preview.
+=======
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Getting Started](#getting-started)
+3. [Features](#features)
+4. [Using the App](#using-the-app)
+5. [Settings Explained](#settings-explained)
+6. [Architecture](#architecture)
+>>>>>>> 5ca007515917c4de632a0c434c85bf6a52ad38e0
 
 ---
 
@@ -85,6 +96,7 @@ SettingsPlayground/
 
 ---
 
+<<<<<<< HEAD
 ## Key Settings
 
 ### Appearance
@@ -155,7 +167,11 @@ public void Dispose()
 - **JSON** - Settings storage
 
 ---
+=======
+## Support & Feedback
+
+For questions, issues, or feature requests, please contact the developer.
+>>>>>>> 5ca007515917c4de632a0c434c85bf6a52ad38e0
 
 **Version:** 1.0  
 **Last Updated:** January 2026
-
