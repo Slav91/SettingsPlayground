@@ -7,11 +7,8 @@ A MAUI Blazor Hybrid app demonstrating real-time UI customization with live prev
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Getting Started](#getting-started)
-3. [Features](#features)
-4. [Using the App](#using-the-app)
-5. [Settings Explained](#settings-explained)
-6. [Architecture](#architecture)
+2. [Features](#features)
+3. [Architecture](#architecture)
 
 ---
 
@@ -28,21 +25,11 @@ A MAUI Blazor Hybrid app demonstrating real-time UI customization with live prev
 
 ---
 
-## Getting Started
-
 ### Prerequisites
 
 - .NET 8.0 SDK or later
 - Visual Studio 2022 (17.8+) or JetBrains Rider
 - Platform-specific SDKs (Android SDK, Xcode, Windows SDK)
-
-### Build and Run
-
-1. Open `SettingsPlayground.sln` in Visual Studio
-2. Select your target platform
-3. Press **F5**
-
----
 
 ## Features
 
@@ -52,23 +39,6 @@ A MAUI Blazor Hybrid app demonstrating real-time UI customization with live prev
 - **Import/Export** - Share settings as JSON
 - **Design Tokens** - CSS custom properties for consistent theming
 - **Accessibility** - Reduced motion and high contrast modes
-
----
-
-## Project Structure
-
-```
-SettingsPlayground/
-├── Components/
-│   ├── Pages/              # PreviewPage, SettingsPage
-│   ├── Views/
-│   │   ├── PreviewCards/   # Profile, Stats, Buttons, etc.
-│   │   └── SettingsRows/   # Toggle, Slider, Segment controls
-│   └── AppInitializer.razor
-├── Models/                 # UserSettings, enums
-├── Services/               # SettingsState, ThemeService, Store
-└── wwwroot/               # CSS, JavaScript
-```
 
 ---
 
@@ -110,48 +80,6 @@ SettingsPlayground/
 ### Preferences
 - **Confirm Deletes** - Show confirmation dialogs
 - **Start Page** - Preview or Settings
-
----
-
-## Development
-
-### Adding a New Setting
-
-1. Add property to `UserSettings.cs`
-2. Add UI control to `SettingsPage.razor`
-3. Add handler calling `SettingsState.UpdateAsync()`
-4. Update `ThemeService.cs` if needed
-5. Add CSS in `theme.css`
-
-### Using Design Tokens
-
-Always use CSS custom properties:
-
-```css
-.my-component {
-    background-color: var(--card-background);
-    color: var(--text-primary);
-    padding: var(--space-m);
-    border-radius: var(--corner-m);
-    font-size: var(--font-m);
-}
-```
-
-### Event Handling
-
-Always implement `IDisposable` when subscribing to events:
-
-```csharp
-protected override void OnInitialized()
-{
-    SettingsState.SettingsChanged += OnSettingsChanged;
-}
-
-public void Dispose()
-{
-    SettingsState.SettingsChanged -= OnSettingsChanged;
-}
-```
 
 ---
 
