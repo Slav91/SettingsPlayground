@@ -1,7 +1,5 @@
 # Settings Playground
 
-**Copyright Slav Povstianoj 2026**
-
 A MAUI Blazor Hybrid app demonstrating real-time UI customization with live preview.
 =======
 ## Table of Contents
